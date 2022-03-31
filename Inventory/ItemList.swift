@@ -11,15 +11,17 @@ class ItemList{
     var items = [Item]()
     
     func addItem(item: Item){
-        // complete code
+         items.append(item)
     }
     
     func deleteItem(row: Int){
-        // complete code
+        items.remove(at: row)
     }
     
     func moveItem(from: Int, to: Int){
-        // complete code
+        let temp = items[from]
+        deleteItem(row: from)
+        items.insert(temp, at: to)
     }
     
 }
