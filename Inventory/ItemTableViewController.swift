@@ -25,8 +25,8 @@ class ItemTableViewController: UITableViewController {
 
         do {
             if let itemVals = userVal.object(forKey: "inventory") {
-                let itemDecodedVal = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data as! Data) as? [Item]
-                itemInventory.items = decodedItems!
+                let itemDecodedVal = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(itemVals as! Data) as? [Item]
+                itemInventory.items = itemDecodedVal!
             }
         } catch  {}
         
@@ -48,7 +48,7 @@ class ItemTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "item", for: indexPath)
 
         //Show the name of item
-        let itemName = inventory.items[indexPath.row]
+        let itemName = itemInventory.items[indexPath.row]
         cell.textLabel?.text = itemName.name
 
         return cell
@@ -99,12 +99,13 @@ class ItemTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let outputVal = segue.destination as! DetailsViewController
         
-        outputVal.inventory = itemInventory;
-        outputVal.userVal =  userDefaults;
+        outputVal.itemInventory = itemInventory;
+        outputVal.userVal =  userVal;
         
         if(segue.identifier == "edit"){
             let rowVal: UITableViewCell = sender as! UITableViewCell
-            outputVal.index = tableView.indexPath(for: rowVal)?.row
+            outputVal.selectedItem = tableView.indexPath(for: rowVal)?.row
+            
         }
         
     }
@@ -114,10 +115,10 @@ class ItemTableViewController: UITableViewController {
         tableView.reloadData()
     }
 
-    func userDefaultsUpdate{
+    func userDefaultsUpdate() {
         do {
             
-            let itemEncodedVal = try NSKeyedArchiver.archivedData(withRootObject: inventory.items, requiringSecureCoding:false)
+            let itemEncodedVal = try NSKeyedArchiver.archivedData(withRootObject: itemInventory.items, requiringSecureCoding:false)
             userVal.set(itemEncodedVal, forKey: "inventory")
         } catch  {}
     }

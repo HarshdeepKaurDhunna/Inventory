@@ -36,9 +36,9 @@ class DetailsViewController: UIViewController {
     //This method is to save or update data
     @IBAction func save(_ sender: Any) {
     let val = Item(name: nameField.text!,SKU: SKUField.text!,description: descField.text!, dateAdded: dateField.date)
-    if(nil != index) {
-        itemInventory.items.remove(at: index!)
-        itemInventory.items.insert(val, at: index!)
+    if(nil != selectedItem) {
+        itemInventory.items.remove(at: selectedItem!)
+        itemInventory.items.insert(val, at: selectedItem!)
 
     }else {
         itemInventory.addItem(item: val)
